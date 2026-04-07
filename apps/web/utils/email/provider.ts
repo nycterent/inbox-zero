@@ -3,11 +3,13 @@ import {
   getOutlookClientForEmail,
 } from "@/utils/email-account-client";
 import { GmailProvider } from "@/utils/email/google";
+import { ImapProvider } from "@/utils/email/imap";
 import { OutlookProvider } from "@/utils/email/microsoft";
 import type { EmailProvider } from "@/utils/email/types";
 import { assertProviderNotRateLimited } from "@/utils/email/rate-limit";
 import { toRateLimitProvider } from "@/utils/email/rate-limit-mode-error";
 import { recordEmailAccountProviderIssue } from "@/utils/email/provider-health";
+import { getImapCredentials } from "@/utils/imap/credential";
 import type { Logger } from "@/utils/logger";
 import { flushLoggerSafely } from "@/utils/logger-flush";
 
@@ -35,6 +37,14 @@ export async function createEmailProvider({
       const client = await getGmailClientForEmail({ emailAccountId, logger });
       return withProviderFailureLogging(
         new GmailProvider(client, logger, emailAccountId),
+        { emailAccountId, provider: rateLimitProvider, logger },
+      );
+    }
+
+    if (rateLimitProvider === "imap") {
+      const credentials = await getImapCredentials(emailAccountId);
+      return withProviderFailureLogging(
+        new ImapProvider(credentials, logger),
         { emailAccountId, provider: rateLimitProvider, logger },
       );
     }
@@ -81,7 +91,7 @@ function withProviderFailureLogging(
     logger,
   }: {
     emailAccountId: string;
-    provider: "google" | "microsoft";
+    provider: "google" | "microsoft" | "imap";
     logger: Logger;
   },
 ): EmailProvider {
@@ -144,7 +154,7 @@ async function logProviderOperationFailure({
 }: {
   error: unknown;
   emailAccountId: string;
-  provider: "google" | "microsoft";
+  provider: "google" | "microsoft" | "imap";
   logger: Logger;
   operation: string;
 }) {
@@ -195,7 +205,7 @@ async function recordProviderIssueSafely({
 type ProviderOperationFailureLogInput = {
   error: unknown;
   emailAccountId: string;
-  provider: "google" | "microsoft";
+  provider: "google" | "microsoft" | "imap";
   logger: Logger;
   operation: string;
 };

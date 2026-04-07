@@ -30,7 +30,9 @@ function mapLabelColor(provider: string, label: any): EmailLabel["color"] {
 
   if (isGoogleProvider(provider)) {
     return label.color;
-  } else if (isMicrosoftProvider(provider)) {
+  }
+
+  if (isMicrosoftProvider(provider)) {
     const presetColor = label.color as string;
     const backgroundColor =
       OUTLOOK_COLOR_MAP[presetColor as keyof typeof OUTLOOK_COLOR_MAP] ||
@@ -42,7 +44,8 @@ function mapLabelColor(provider: string, label: any): EmailLabel["color"] {
     };
   }
 
-  throw new Error(`Unsupported provider: ${provider}`);
+  // IMAP and other providers: return raw color or undefined
+  return label.color;
 }
 
 export function EmailProvider(props: { children: React.ReactNode }) {

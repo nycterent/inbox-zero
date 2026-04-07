@@ -38,6 +38,9 @@ const providerRuleActionFieldBuilders: Record<
   microsoft: (fields) => ({
     folderName: fields.folderName ?? null,
   }),
+  imap: (fields) => ({
+    folderName: fields.folderName ?? null,
+  }),
 };
 
 export function buildProviderRuleActionFields({

@@ -184,6 +184,7 @@ const gmailAccountOverviewTool = (options: InboxToolOptions) =>
 const accountOverviewTools = {
   google: gmailAccountOverviewTool,
   microsoft: outlookAccountOverviewTool,
+  imap: gmailAccountOverviewTool,
 };
 
 export const getAccountOverviewTool = (options: InboxToolOptions) =>
@@ -292,6 +293,9 @@ const getSenderCategorizationStatusInputSchema = z.object({
       "Optional server-side wait before reading progress. Use for short bounded polling only.",
     ),
 });
+
+const IMAP_SEARCH_QUERY_DESCRIPTION =
+  "Search query. Supports: from:, to:, subject:, is:unread, is:read, since:YYYY-MM-DD, before:YYYY-MM-DD, has:attachment. Do not use Gmail-specific operators like in:, label:, or KQL syntax.";
 
 const manageSenderCategoryInputSchema = z
   .object({
@@ -508,6 +512,11 @@ const gmailSearchInboxInputSchema = z.object({
   ...searchInboxBaseFields,
 });
 
+const imapSearchInboxInputSchema = z.object({
+  query: z.string().trim().min(1).max(500).describe(IMAP_SEARCH_QUERY_DESCRIPTION),
+  ...searchInboxBaseFields,
+});
+
 const outlookSearchInboxInputSchema = z
   .object({
     query: z
@@ -551,6 +560,50 @@ const gmailSearchInboxTool = ({
     description:
       "Search inbox messages and return concise message metadata. Limit must be between 1 and 20 messages per call. If hasMore=true, more matches remain; for bulk or all-matching requests, keep calling searchInbox with nextPageToken until hasMore=false before reporting completion. totalReturned is only the number of messages returned by this call, so do not present it or a single search page as an exact mailbox, folder, or label count. If the tool returns an error or provider search feedback instead of messages, treat the lookup as inconclusive rather than evidence that the email is absent.",
     inputSchema: gmailSearchInboxInputSchema,
+    execute: async (input) => {
+      trackToolCall({ tool: "search_inbox", email, logger });
+
+      const { query, limit, pageToken } = input;
+
+      try {
+        const emailProvider = await createEmailProvider({
+          emailAccountId,
+          provider,
+          logger,
+        });
+
+        const [searchResult, labels] = await Promise.all([
+          emailProvider.searchMessages({
+            query,
+            maxResults: limit ?? SEARCH_INBOX_MAX_RESULTS,
+            pageToken: pageToken ?? undefined,
+          }),
+          getLabelsForSearchResults({ emailProvider, logger }),
+        ]);
+
+        return formatSearchInboxResult({
+          searchResult,
+          queryUsed: query,
+          labels,
+          taxonomyNamesKey: "labelNames",
+        });
+      } catch {
+        // Provider failures are logged and flushed at the provider boundary.
+        return { queryUsed: query, error: "Failed to search inbox" };
+      }
+    },
+  });
+
+const imapSearchInboxTool = ({
+  email,
+  emailAccountId,
+  provider,
+  logger,
+}: InboxToolOptions) =>
+  tool({
+    description:
+      "Search inbox messages and return concise message metadata. Limit must be between 1 and 20 messages per call. If hasMore=true, more matches remain; for bulk or all-matching requests, keep calling searchInbox with nextPageToken until hasMore=false before reporting completion. totalReturned is only the number of messages returned by this call, so do not present it or a single search page as an exact mailbox or folder count. If the tool returns an error or provider search feedback instead of messages, treat the lookup as inconclusive rather than evidence that the email is absent.",
+    inputSchema: imapSearchInboxInputSchema,
     execute: async (input) => {
       trackToolCall({ tool: "search_inbox", email, logger });
 
@@ -650,6 +703,7 @@ const outlookSearchInboxTool = ({
 const searchInboxTools = {
   google: gmailSearchInboxTool,
   microsoft: outlookSearchInboxTool,
+  imap: imapSearchInboxTool,
 };
 
 export const searchInboxTool = (options: InboxToolOptions) =>
@@ -992,6 +1046,7 @@ const gmailManageInboxTool = (options: InboxToolOptions) =>
 const manageInboxTools = {
   google: gmailManageInboxTool,
   microsoft: outlookManageInboxTool,
+  imap: gmailManageInboxTool,
 };
 
 export const manageInboxTool = (options: InboxToolOptions) =>
