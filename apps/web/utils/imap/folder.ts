@@ -29,14 +29,32 @@ export async function listFoldersAsOutlookFolders(
   client: ImapFlow,
 ): Promise<OutlookFolder[]> {
   const mailboxes = await client.list();
-  return mailboxes.map((mb) => ({
-    id: mb.path,
-    displayName: mb.name,
-    parentFolderId: mb.parentPath || undefined,
-    childFolderCount: 0,
-    unreadItemCount: 0,
-    totalItemCount: 0,
-  }));
+
+  const byPath = new Map<string, OutlookFolder>();
+  for (const mb of mailboxes) {
+    byPath.set(mb.path, {
+      id: mb.path,
+      displayName: mb.name,
+      childFolders: [],
+      childFolderCount: 0,
+    });
+  }
+
+  const roots: OutlookFolder[] = [];
+  for (const mb of mailboxes) {
+    const folder = byPath.get(mb.path);
+    if (!folder) continue;
+
+    const parent = mb.parentPath ? byPath.get(mb.parentPath) : undefined;
+    if (parent) {
+      parent.childFolders.push(folder);
+      parent.childFolderCount = parent.childFolders.length;
+    } else {
+      roots.push(folder);
+    }
+  }
+
+  return roots;
 }
 
 function convertMailboxToLabel(mailbox: ListResponse): EmailLabel {
