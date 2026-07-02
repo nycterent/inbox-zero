@@ -1,0 +1,35 @@
+apps/web/utils/email/imap.ts
+  s_9b0e03a1f16ce1::t_47b48333aa135b 431,597-605,979,985
+  s_9b0e03a1f16ce1::t_1eaf0c6d1fc14f 3
+  s_9b0e03a1f16ce1::t_a1f64bff319238 10
+  s_9b0e03a1f16ce1::t_feb4fa9f8398fe 701-702,711-723
+  s_9b0e03a1f16ce1::t_eb3f53c0ba171b 253-256,977-978,983-984
+apps/web/utils/imap/folder.ts
+  s_9b0e03a1f16ce1::t_6c41b4c43f53f2 32-57
+apps/web/utils/imap/draft.ts
+  s_9b0e03a1f16ce1::t_71a71718f50d90 56-57
+apps/web/utils/imap/message.ts
+  s_9b0e03a1f16ce1::t_e7d39705e8aa34 35-40,45,47,86-87,95-96,101-103
+  s_9b0e03a1f16ce1::t_fd70e89e4a787d 165
+  s_9b0e03a1f16ce1::t_9af5380c73da1a 21,27,34,104-112,125,129,132
+apps/web/utils/email/provider-health.ts
+  s_9b0e03a1f16ce1::t_9334cf79c64b59 32,83,126
+pnpm-lock.yaml
+  s_9b0e03a1f16ce1::t_de76e20569f549 455-457,473-475,651-653,3750-3752,6247-6249,6601-6603,6779-6782,7873-7876,8630-8632,9118-9126,9354-9356,9975-9978,10261-10270,10448-10450,10578-10580,10824-10830,11061-11064,11279-11282,11302-11308,11623-11626,11671-11674,11753,15609-15610,18475-18479,18837-18842,18988-18989,20108-20109,21079-21090,21574-21584,21780-21792,22660-22661,22915-22934,23098-23099,23285-23286,23591-23594,23924-23925,24333-24334,24369-24377,24727-24730,24774-24775
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "ee69123f7820c150aff3c4da32646a04bce60def",
+  "prompts": {},
+  "sessions": {
+    "s_9b0e03a1f16ce1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fb0d74d4-4b2e-48cf-bff1-1892d61f9b9f",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Marty <saint@ghost.lt>"
+    }
+  }
+}
