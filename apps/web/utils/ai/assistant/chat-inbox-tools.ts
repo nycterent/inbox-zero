@@ -295,7 +295,7 @@ const getSenderCategorizationStatusInputSchema = z.object({
 });
 
 const IMAP_SEARCH_QUERY_DESCRIPTION =
-  "Search query. Supports: from:, to:, subject:, is:unread, is:read, since:YYYY-MM-DD, before:YYYY-MM-DD, has:attachment. Do not use Gmail-specific operators like in:, label:, or KQL syntax.";
+  "Search query. Leave empty to list the most recent inbox messages (use this when the user asks about their latest/recent email). Supports: from:, to:, subject:, is:unread, is:read, since:YYYY-MM-DD, before:YYYY-MM-DD, has:attachment. Do not use Gmail-specific operators like in:, label:, or KQL syntax.";
 
 const manageSenderCategoryInputSchema = z
   .object({
@@ -513,7 +513,12 @@ const gmailSearchInboxInputSchema = z.object({
 });
 
 const imapSearchInboxInputSchema = z.object({
-  query: z.string().trim().min(1).max(500).describe(IMAP_SEARCH_QUERY_DESCRIPTION),
+  query: z
+    .string()
+    .trim()
+    .max(500)
+    .default("")
+    .describe(IMAP_SEARCH_QUERY_DESCRIPTION),
   ...searchInboxBaseFields,
 });
 
