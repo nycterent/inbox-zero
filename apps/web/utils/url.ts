@@ -79,6 +79,19 @@ const PROVIDER_CONFIG: Record<
         emailAddress,
       ),
   },
+  // Generic IMAP accounts are served through Proton Mail Bridge in this fork.
+  // Proton's webmail is a SPA with no message-id-addressable deep links (its
+  // internal IDs differ from RFC Message-IDs), so we can only open the mailbox
+  // root rather than a specific message. This still beats the `default` config,
+  // which would send IMAP users to Gmail.
+  imap: {
+    requiresMessageId: false,
+    buildUrl: (_messageOrThreadId: string, _emailAddress?: string | null) =>
+      "https://mail.proton.me/u/0/all-mail",
+    selectId: (_messageId: string, threadId: string) => threadId,
+    buildSearchUrl: (_from: string, _emailAddress?: string | null) =>
+      "https://mail.proton.me/u/0/all-mail",
+  },
   default: {
     requiresMessageId: false,
     buildUrl: (messageOrThreadId: string, emailAddress?: string | null) =>
