@@ -82,6 +82,77 @@ export async function fetchRecentMessages(
 }
 
 /**
+ * Resolve the "All Mail" mailbox path (Proton, Gmail-IMAP, etc.).
+ * Prefers the RFC 6154 \All special-use flag, falling back to a name match.
+ * Returns null if the server has no all-mail folder.
+ */
+export async function resolveAllMailPath(
+  client: ImapFlow,
+): Promise<string | null> {
+  try {
+    const boxes = await client.list();
+    const special = boxes.find((b) => b.specialUse === "\\All");
+    if (special) return special.path;
+    const byName = boxes.find(
+      (b) => /(^|\/)all mail$/i.test(b.path) || /^all mail$/i.test(b.name),
+    );
+    return byName?.path ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetch one message by UID, trying each folder in order until it resolves.
+ * IMAP UIDs are per-folder, so a message archived out of the inbox only
+ * resolves in "All Mail" (or its own folder), not INBOX.
+ */
+export async function fetchMessageByUidInFolders(
+  client: ImapFlow,
+  uid: number,
+  folders: string[],
+): Promise<ParsedMessage | null> {
+  for (const folder of folders) {
+    if (!folder) continue;
+    try {
+      await client.mailboxOpen(folder, { readOnly: true });
+      const msg = await fetchMessageByUid(client, uid);
+      if (msg) return msg;
+    } catch {
+      // Folder missing or unselectable — try the next one.
+    }
+  }
+  return null;
+}
+
+/**
+ * Fetch multiple messages by UID, trying each folder in order. UIDs still
+ * unresolved after a folder are retried in the next one.
+ */
+export async function fetchMessagesByUidsInFolders(
+  client: ImapFlow,
+  uids: number[],
+  folders: string[],
+): Promise<ParsedMessage[]> {
+  const remaining = new Set(uids);
+  const found: ParsedMessage[] = [];
+  for (const folder of folders) {
+    if (!folder || remaining.size === 0) continue;
+    try {
+      await client.mailboxOpen(folder, { readOnly: true });
+    } catch {
+      continue;
+    }
+    const msgs = await fetchMessagesByUids(client, [...remaining]);
+    for (const m of msgs) {
+      found.push(m);
+      remaining.delete(Number(m.id));
+    }
+  }
+  return found;
+}
+
+/**
  * Fetch multiple messages by UIDs - envelope only (no body).
  * Uses UID-based SEARCH to find each message's sequence number,
  * then fetches by sequence range (WorkMail-compatible).

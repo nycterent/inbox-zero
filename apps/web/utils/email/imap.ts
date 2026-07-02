@@ -19,9 +19,12 @@ import { withImapConnection } from "@/utils/imap/client";
 import {
   convertImapMessage,
   fetchMessageByUid,
+  fetchMessageByUidInFolders,
   fetchMessagesByUids,
+  fetchMessagesByUidsInFolders,
   fetchRecentMessages,
   parseSearchQuery,
+  resolveAllMailPath,
   searchImapMessages,
 } from "@/utils/imap/message";
 import {
@@ -69,8 +72,15 @@ export class ImapProvider implements EmailProvider {
 
   async getMessage(messageId: string): Promise<ParsedMessage> {
     return this.withConnection(async (client) => {
-      await client.mailboxOpen("INBOX", { readOnly: true });
-      const msg = await fetchMessageByUid(client, Number(messageId));
+      // IMAP UIDs are per-folder. A message archived out of the inbox only
+      // resolves in "All Mail" (Proton/Gmail), so fall back there after INBOX.
+      const allMail = await resolveAllMailPath(client);
+      const folders = allMail ? ["INBOX", allMail] : ["INBOX"];
+      const msg = await fetchMessageByUidInFolders(
+        client,
+        Number(messageId),
+        folders,
+      );
       if (!msg) throw new Error(`Message ${messageId} not found`);
       return msg;
     });
@@ -80,21 +90,34 @@ export class ImapProvider implements EmailProvider {
     rfc822MessageId: string,
   ): Promise<ParsedMessage | null> {
     return this.withConnection(async (client) => {
-      await client.mailboxOpen("INBOX", { readOnly: true });
-      const uids = await searchImapMessages(
-        client,
-        { header: { "Message-ID": rfc822MessageId } },
-        1,
-      );
-      if (uids.length === 0) return null;
-      return fetchMessageByUid(client, uids[0]);
+      const allMail = await resolveAllMailPath(client);
+      const folders = allMail ? ["INBOX", allMail] : ["INBOX"];
+      for (const folder of folders) {
+        try {
+          await client.mailboxOpen(folder, { readOnly: true });
+        } catch {
+          continue;
+        }
+        const uids = await searchImapMessages(
+          client,
+          { header: { "Message-ID": rfc822MessageId } },
+          1,
+        );
+        if (uids.length > 0) return fetchMessageByUid(client, uids[0]);
+      }
+      return null;
     });
   }
 
   async getMessagesBatch(messageIds: string[]): Promise<ParsedMessage[]> {
     return this.withConnection(async (client) => {
-      await client.mailboxOpen("INBOX", { readOnly: true });
-      return fetchMessagesByUids(client, messageIds.map(Number));
+      const allMail = await resolveAllMailPath(client);
+      const folders = allMail ? ["INBOX", allMail] : ["INBOX"];
+      return fetchMessagesByUidsInFolders(
+        client,
+        messageIds.map(Number),
+        folders,
+      );
     });
   }
 
