@@ -1,0 +1,37 @@
+apps/web/utils/ai/assistant/tools/rules/shared.ts
+  s_9b0e03a1f16ce1::t_2ac71a13cf0327 41-43
+apps/web/utils/ai/rule/create-rule-schema.ts
+  s_9b0e03a1f16ce1::t_8a0fc0e74d8d3a 327-329
+  s_9b0e03a1f16ce1::t_a58b9b409025d3 354
+apps/web/utils/ai/assistant/chat-inbox-tools.ts
+  s_9b0e03a1f16ce1::t_db97f1a07d2d16 297-298
+  s_9b0e03a1f16ce1::t_d0af0b9dfa8fc9 706
+  s_9b0e03a1f16ce1::t_6b32067f77c1c3 1049
+  s_9b0e03a1f16ce1::t_4e07da8a98ccc6 187
+  s_9b0e03a1f16ce1::t_c8e3a2fcf61e7b 515-519
+  s_9b0e03a1f16ce1::t_0949b2d44a40aa 597-640
+apps/web/utils/email/provider.ts
+  s_9b0e03a1f16ce1::t_a3ba93d37c08e6 44-51
+  s_9b0e03a1f16ce1::t_6eda442a121049 157
+  s_9b0e03a1f16ce1::t_96168b55a65b13 94
+  s_9b0e03a1f16ce1::t_938040b1d024a8 208
+apps/web/utils/ai/rule/action-availability.ts
+  s_9b0e03a1f16ce1::t_4e94362c65c6d7 20
+  s_9b0e03a1f16ce1::t_1a187160cd4c65 3-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "00168c5793db44cb20c1bd824f51e013025a4348",
+  "prompts": {},
+  "sessions": {
+    "s_9b0e03a1f16ce1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fb0d74d4-4b2e-48cf-bff1-1892d61f9b9f",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Marty <saint@ghost.lt>"
+    }
+  }
+}
