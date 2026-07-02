@@ -1,0 +1,20 @@
+apps/web/utils/ai/assistant/chat-inbox-tools.ts
+  s_9b0e03a1f16ce1::t_468b94e5f10566 298
+  s_9b0e03a1f16ce1::t_ba48367ad468b3 516-521
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "9edfbd1d437dbbc01e2e17cfcec62d1fca419fd3",
+  "prompts": {},
+  "sessions": {
+    "s_9b0e03a1f16ce1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fb0d74d4-4b2e-48cf-bff1-1892d61f9b9f",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Marty <saint@ghost.lt>"
+    }
+  }
+}
