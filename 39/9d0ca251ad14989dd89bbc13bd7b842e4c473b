@@ -1,0 +1,19 @@
+apps/web/utils/imap/client.ts
+  s_9b0e03a1f16ce1::t_703a2884640d80 8-40,52-58,69,73,82-84,90-95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "399d0ca251ad14989dd89bbc13bd7b842e4c473b",
+  "prompts": {},
+  "sessions": {
+    "s_9b0e03a1f16ce1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fb0d74d4-4b2e-48cf-bff1-1892d61f9b9f",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Marty <saint@ghost.lt>"
+    }
+  }
+}
