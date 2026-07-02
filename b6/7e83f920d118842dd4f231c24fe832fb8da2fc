@@ -1,0 +1,19 @@
+apps/web/prisma/migrations/20260702120000_add_imap_credential/migration.sql
+  s_9b0e03a1f16ce1::t_297dada0c71fe0 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "b67e83f920d118842dd4f231c24fe832fb8da2fc",
+  "prompts": {},
+  "sessions": {
+    "s_9b0e03a1f16ce1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fb0d74d4-4b2e-48cf-bff1-1892d61f9b9f",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Marty <saint@ghost.lt>"
+    }
+  }
+}
