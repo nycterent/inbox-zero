@@ -78,6 +78,8 @@ describe("LoginForm", () => {
       "Sign in with Google",
       "Sign in with Microsoft",
       "Sign in with Apple",
+      "Sign in with email",
+      "Don't have an account? Sign up",
     ]);
   });
 
