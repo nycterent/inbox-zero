@@ -1,0 +1,24 @@
+apps/web/utils/imap/message.ts
+  s_9b0e03a1f16ce1::t_85e45efe36bbe7 84-154
+apps/web/utils/email/imap.ts
+  s_9b0e03a1f16ce1::t_98a25e780057d7 93-108
+  s_9b0e03a1f16ce1::t_e3e7d3aa077da0 22,24,27
+  s_9b0e03a1f16ce1::t_e028f74f3e8e6c 114-120
+  s_9b0e03a1f16ce1::t_db2e80a7a976f5 75-83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "26a1cb4e75bdbbe9b92fc81dc8f2e291eb649022",
+  "prompts": {},
+  "sessions": {
+    "s_9b0e03a1f16ce1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fb0d74d4-4b2e-48cf-bff1-1892d61f9b9f",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Marty <saint@ghost.lt>"
+    }
+  }
+}
