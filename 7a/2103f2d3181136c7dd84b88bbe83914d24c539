@@ -1,0 +1,19 @@
+apps/web/app/(landing)/login/LoginForm.test.tsx
+  s_9b0e03a1f16ce1::t_94808caaa589ee 81-82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "7a2103f2d3181136c7dd84b88bbe83914d24c539",
+  "prompts": {},
+  "sessions": {
+    "s_9b0e03a1f16ce1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fb0d74d4-4b2e-48cf-bff1-1892d61f9b9f",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Marty <saint@ghost.lt>"
+    }
+  }
+}
