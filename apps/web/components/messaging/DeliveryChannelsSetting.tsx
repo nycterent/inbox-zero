@@ -41,6 +41,11 @@ const PROVIDER_CONFIG: Record<
     icon: SendIcon,
     supportsTargetSelection: false,
   },
+  MATRIX: {
+    name: "Matrix",
+    icon: HashIcon,
+    supportsTargetSelection: false,
+  },
 };
 
 type EmailDeliveryProps = {

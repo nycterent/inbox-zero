@@ -7,6 +7,7 @@ import {
   ChevronRightIcon,
   CreditCardIcon,
   MailIcon,
+  HashIcon,
   MessageCircleIcon,
   MessagesSquareIcon,
   PlugIcon,
@@ -292,6 +293,7 @@ const PROVIDER_LABELS: Record<string, string> = {
   SLACK: "Slack",
   TEAMS: "Teams",
   TELEGRAM: "Telegram",
+  MATRIX: "Matrix",
 };
 
 function ProviderIcon({
@@ -308,6 +310,8 @@ function ProviderIcon({
       return <MessageCircleIcon className={className} />;
     case "TELEGRAM":
       return <SendIcon className={className} />;
+    case "MATRIX":
+      return <HashIcon className={className} />;
     default:
       return <PlugIcon className={className} />;
   }
