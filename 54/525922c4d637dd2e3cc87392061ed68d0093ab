@@ -1,0 +1,67 @@
+apps/web/app/(app)/[emailAccountId]/channels/Channels.tsx
+  s_9b0e03a1f16ce1::t_2b24dd14614f00 99,102-107
+  s_9b0e03a1f16ce1::t_0d26dd41b30e42 616-626,631-728
+  s_9b0e03a1f16ce1::t_c9fbea171086c3 61,64-65
+  s_9b0e03a1f16ce1::t_4fb341d228a2e4 567-568
+  s_9b0e03a1f16ce1::t_3162e3fff0b2b8 538
+  s_9b0e03a1f16ce1::t_9ef9a19bef5300 729-731
+apps/web/utils/digest/send-digest.ts
+  s_9b0e03a1f16ce1::t_97ef76d1bbfb03 119
+apps/web/utils/actions/messaging-channels.ts
+  s_9b0e03a1f16ce1::t_c52fd5a959bbb1 12
+  s_9b0e03a1f16ce1::t_4cfba159b0fed5 306-338
+apps/web/utils/follow-up/send-follow-up-notification.ts
+  s_9b0e03a1f16ce1::t_64b45fc71538b3 129
+apps/web/utils/messaging/channel-validity.ts
+  s_9b0e03a1f16ce1::t_bd6fc840e2eb54 22-24
+  s_9b0e03a1f16ce1::t_d84b0539b4dd9b 41-42
+  s_9b0e03a1f16ce1::t_0c790adf8d945a 86-89
+apps/web/app/api/user/messaging-channels/[channelId]/targets/route.ts
+  s_9b0e03a1f16ce1::t_b69d5457b4a5bd 45-46,50-64
+  s_9b0e03a1f16ce1::t_f6bbd0dfc07f7d 65
+apps/web/utils/messaging/platforms.ts
+  s_9b0e03a1f16ce1::t_a8d69e3a800bae 1-2,8
+apps/web/utils/meeting-briefs/send-briefing.ts
+  s_9b0e03a1f16ce1::t_bffda369057077 140
+apps/web/prisma/schema.prisma
+  s_9b0e03a1f16ce1::t_392c9f95415e47 1924
+apps/web/utils/drive/filing-messaging-notifications.ts
+  s_9b0e03a1f16ce1::t_f2e475e860b76c 126-127
+apps/web/utils/follow-up/labels.ts
+  s_9b0e03a1f16ce1::t_8f0a32fad34bbc 463-467
+apps/web/utils/messaging/matrix.ts
+  s_9b0e03a1f16ce1::t_8c960e23f4cffe 1-26
+apps/web/public/images/matrix.svg
+  s_9b0e03a1f16ce1::t_f10301ff977094 1-4
+apps/web/utils/messaging/rule-notifications.ts
+  s_9b0e03a1f16ce1::t_da02055d37301e 2137-2140
+  s_9b0e03a1f16ce1::t_6342aa5fac4dbf 2645-2648,2651-2655,2658-2664
+  s_9b0e03a1f16ce1::t_b515184dc275f2 568-571
+  s_9b0e03a1f16ce1::t_0d3c5999830fa9 475-476
+apps/web/app/api/user/messaging-channels/route.ts
+  s_9b0e03a1f16ce1::t_32e625b182a08b 116
+apps/web/utils/actions/messaging-channels.validation.ts
+  s_9b0e03a1f16ce1::t_d90983592f64dc 49-54
+apps/web/prisma/migrations/20260703120000_add_matrix_provider/migration.sql
+  s_9b0e03a1f16ce1::t_7786f82205fc6a 1
+apps/web/utils/automation-jobs/messaging.ts
+  s_9b0e03a1f16ce1::t_ee59bef4839973 66-73,82-113
+  s_9b0e03a1f16ce1::t_ee2e73588dee84 11
+  s_9b0e03a1f16ce1::t_356b253d6ff8a8 114-115
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "54525922c4d637dd2e3cc87392061ed68d0093ab",
+  "prompts": {},
+  "sessions": {
+    "s_9b0e03a1f16ce1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fb0d74d4-4b2e-48cf-bff1-1892d61f9b9f",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": null
+    }
+  }
+}
