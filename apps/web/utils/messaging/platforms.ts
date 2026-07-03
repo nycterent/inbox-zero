@@ -1,4 +1,8 @@
-export type MessagingPlatform = "slack" | "teams" | "telegram" | "matrix";
+// MessagingPlatform is the interactive chat-sdk layer (Slack/Teams/Telegram
+// bots with adapters, webhooks, link codes). Matrix is intentionally NOT here:
+// it is a send-only MessagingProvider whose delivery is delegated to a maubot
+// webhook, so it never touches the adapter/bot/platform machinery.
+export type MessagingPlatform = "slack" | "teams" | "telegram";
 export type MessagingProvider = "SLACK" | "TEAMS" | "TELEGRAM" | "MATRIX";
 
 const PROVIDER_NAMES: Record<MessagingProvider, string> = {
