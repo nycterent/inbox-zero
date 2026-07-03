@@ -648,7 +648,6 @@ function MatrixConnectDialog({
     createMatrixChannelAction.bind(null, emailAccountId),
     {
       onSuccess: () => {
-        analytics.captureAction("channel_connected", { provider: "MATRIX" });
         toastSuccess({ description: "Matrix connected" });
         setNotifyUrl("");
         setSecret("");
