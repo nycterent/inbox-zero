@@ -58,8 +58,11 @@ import {
   updateMessagingFeatureRouteAction,
   toggleRuleChannelAction,
   createMessagingLinkCodeAction,
+  createMatrixChannelAction,
   disconnectChannelAction,
 } from "@/utils/actions/messaging-channels";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useSlackNotifications } from "@/app/(app)/[emailAccountId]/settings/ConnectedAppsSection";
 import { ProactiveUpdatesSetting } from "@/app/(app)/[emailAccountId]/assistant/settings/ProactiveUpdatesSetting";
 import { toastSuccess, toastError } from "@/components/Toast";
@@ -93,9 +96,15 @@ const PROVIDER_CONFIG: Record<
   SLACK: { name: "Slack", logo: "/images/slack.svg" },
   TEAMS: { name: "Teams", logo: "/images/teams.png" },
   TELEGRAM: { name: "Telegram", logo: "/images/telegram.svg" },
+  MATRIX: { name: "Matrix", logo: "/images/matrix.svg" },
 };
 
-const PROVIDER_ORDER: MessagingProvider[] = ["SLACK", "TEAMS", "TELEGRAM"];
+const PROVIDER_ORDER: MessagingProvider[] = [
+  "SLACK",
+  "TEAMS",
+  "TELEGRAM",
+  "MATRIX",
+];
 
 const CHANNEL_FEATURES: Array<{
   purpose: MessagingFeatureRoutePurpose;
@@ -526,6 +535,7 @@ function UnconnectedProviderSection({
     code: string;
     botUrl?: string | null;
   } | null>(null);
+  const [matrixDialogOpen, setMatrixDialogOpen] = useState(false);
 
   const { execute: executeCreateLinkCode, status: linkCodeStatus } = useAction(
     createMessagingLinkCodeAction.bind(null, emailAccountId),
@@ -554,6 +564,8 @@ function UnconnectedProviderSection({
     analytics.captureAction("channel_connect_started", { provider });
     if (provider === "SLACK") {
       connectSlack();
+    } else if (provider === "MATRIX") {
+      setMatrixDialogOpen(true);
     } else {
       executeCreateLinkCode({ provider });
     }
@@ -601,7 +613,119 @@ function UnconnectedProviderSection({
         dialog={linkCodeDialog}
         onClose={() => setLinkCodeDialog(null)}
       />
+      {provider === "MATRIX" && (
+        <MatrixConnectDialog
+          open={matrixDialogOpen}
+          emailAccountId={emailAccountId}
+          onClose={() => setMatrixDialogOpen(false)}
+          onConnected={() => {
+            setMatrixDialogOpen(false);
+            onConnected();
+          }}
+        />
+      )}
     </>
+  );
+}
+
+function MatrixConnectDialog({
+  open,
+  emailAccountId,
+  onClose,
+  onConnected,
+}: {
+  open: boolean;
+  emailAccountId: string;
+  onClose: () => void;
+  onConnected: () => void;
+}) {
+  const analytics = useProductAnalytics("channels");
+  const [notifyUrl, setNotifyUrl] = useState("");
+  const [secret, setSecret] = useState("");
+  const [label, setLabel] = useState("");
+
+  const { execute, status } = useAction(
+    createMatrixChannelAction.bind(null, emailAccountId),
+    {
+      onSuccess: () => {
+        analytics.captureAction("channel_connected", { provider: "MATRIX" });
+        toastSuccess({ description: "Matrix connected" });
+        setNotifyUrl("");
+        setSecret("");
+        setLabel("");
+        onConnected();
+      },
+      onError: (error) => {
+        toastError({
+          description:
+            getActionErrorMessage(error.error) ?? "Failed to connect",
+        });
+      },
+    },
+  );
+
+  const isExecuting = status === "executing";
+
+  return (
+    <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Connect Matrix</DialogTitle>
+          <DialogDescription>
+            Enter the maubot notify webhook URL and secret for the Matrix room
+            you want notifications delivered to.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="matrix-notify-url">Notify URL</Label>
+            <Input
+              id="matrix-notify-url"
+              placeholder="https://matrix.example.com/_matrix/maubot/plugin/inboxzero/notify"
+              value={notifyUrl}
+              onChange={(e) => setNotifyUrl(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="matrix-secret">Webhook secret</Label>
+            <Input
+              id="matrix-secret"
+              type="password"
+              value={secret}
+              onChange={(e) => setSecret(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="matrix-label">Room name</Label>
+            <Input
+              id="matrix-label"
+              placeholder="Inbox Zero"
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="flex justify-end pt-2">
+          <Button
+            disabled={
+              isExecuting ||
+              !notifyUrl.trim() ||
+              !secret.trim() ||
+              !label.trim()
+            }
+            onClick={() =>
+              execute({
+                notifyUrl: notifyUrl.trim(),
+                secret: secret.trim(),
+                label: label.trim(),
+              })
+            }
+          >
+            Connect
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

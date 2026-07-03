@@ -116,6 +116,7 @@ export async function sendDigest({
         break;
       case MessagingProvider.TEAMS:
       case MessagingProvider.TELEGRAM:
+      case MessagingProvider.MATRIX:
         deliveryPromises.push(
           sendDigestViaMessagingApp({
             channel,

@@ -9,6 +9,7 @@ import {
   disconnectChannelBody,
   linkSlackWorkspaceBody,
   createMessagingLinkCodeBody,
+  createMatrixChannelBody,
   toggleRuleChannelBody,
 } from "@/utils/actions/messaging-channels.validation";
 import prisma from "@/utils/prisma";
@@ -299,6 +300,39 @@ export const linkSlackWorkspaceAction = actionClient
       });
 
       logger.info("Slack workspace linked via org-mate token", { teamId });
+    },
+  );
+
+export const createMatrixChannelAction = actionClient
+  .metadata({ name: "createMatrixChannel" })
+  .inputSchema(createMatrixChannelBody)
+  .action(
+    async ({
+      ctx: { emailAccountId },
+      parsedInput: { notifyUrl, secret, label },
+    }) => {
+      await prisma.messagingChannel.upsert({
+        where: {
+          emailAccountId_provider_teamId: {
+            emailAccountId,
+            provider: MessagingProvider.MATRIX,
+            teamId: notifyUrl,
+          },
+        },
+        update: {
+          teamName: label,
+          accessToken: secret,
+          isConnected: true,
+        },
+        create: {
+          provider: MessagingProvider.MATRIX,
+          teamId: notifyUrl,
+          teamName: label,
+          accessToken: secret,
+          emailAccountId,
+          isConnected: true,
+        },
+      });
     },
   );
 

@@ -113,6 +113,7 @@ function getAvailableProviders(): MessagingProvider[] {
   if (env.SLACK_CLIENT_ID && env.SLACK_CLIENT_SECRET) providers.push("SLACK");
   if (isTeamsBotConfigured()) providers.push("TEAMS");
   if (env.TELEGRAM_BOT_TOKEN) providers.push("TELEGRAM");
+  providers.push("MATRIX");
   return providers;
 }
 

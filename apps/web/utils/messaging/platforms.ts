@@ -1,10 +1,11 @@
-export type MessagingPlatform = "slack" | "teams" | "telegram";
-export type MessagingProvider = "SLACK" | "TEAMS" | "TELEGRAM";
+export type MessagingPlatform = "slack" | "teams" | "telegram" | "matrix";
+export type MessagingProvider = "SLACK" | "TEAMS" | "TELEGRAM" | "MATRIX";
 
 const PROVIDER_NAMES: Record<MessagingProvider, string> = {
   SLACK: "Slack",
   TEAMS: "Teams",
   TELEGRAM: "Telegram",
+  MATRIX: "Matrix",
 };
 
 export function getMessagingProviderName(

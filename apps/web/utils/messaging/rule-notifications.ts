@@ -472,7 +472,8 @@ async function sendLinkedRuleNotification({
     !context.messagingChannel ||
     !isMessagingChannelOperational(context.messagingChannel) ||
     (context.messagingChannel.provider !== MessagingProvider.TEAMS &&
-      context.messagingChannel.provider !== MessagingProvider.TELEGRAM)
+      context.messagingChannel.provider !== MessagingProvider.TELEGRAM &&
+      context.messagingChannel.provider !== MessagingProvider.MATRIX)
   ) {
     logger.warn(
       "Skipping messaging notification with inactive linked channel",
@@ -564,6 +565,10 @@ function hasLinkedMessagingDirectMessageDestination(channel: {
       return Boolean(channel.providerUserId);
     case MessagingProvider.TELEGRAM:
       return Boolean(channel.teamId || channel.providerUserId);
+    case MessagingProvider.MATRIX:
+      // Matrix has a single implicit destination (the maubot webhook baked
+      // into the channel), so it never needs an explicit route.
+      return Boolean(channel.teamId);
     default:
       return false;
   }
@@ -2129,7 +2134,10 @@ export function buildMessagingRuleNotificationText({
 }: {
   actionType: ActionType;
   content: NotificationContent;
-  provider: typeof MessagingProvider.TEAMS | typeof MessagingProvider.TELEGRAM;
+  provider:
+    | typeof MessagingProvider.TEAMS
+    | typeof MessagingProvider.TELEGRAM
+    | typeof MessagingProvider.MATRIX;
 }) {
   const sections = [
     content.title,
@@ -2634,15 +2642,26 @@ function getLinkedProviderLimitationText({
   provider,
 }: {
   actionType: ActionType;
-  provider: typeof MessagingProvider.TEAMS | typeof MessagingProvider.TELEGRAM;
+  provider:
+    | typeof MessagingProvider.TEAMS
+    | typeof MessagingProvider.TELEGRAM
+    | typeof MessagingProvider.MATRIX;
 }) {
   const providerName =
-    provider === MessagingProvider.TEAMS ? "Teams" : "Telegram";
+    provider === MessagingProvider.TEAMS
+      ? "Teams"
+      : provider === MessagingProvider.TELEGRAM
+        ? "Telegram"
+        : "Matrix";
 
   if (isDraftReplyActionType(actionType)) {
-    return provider === MessagingProvider.TEAMS
-      ? "One-click draft editing and sending aren't available in Teams yet. Use Inbox Zero to review or send this draft."
-      : "Draft editing isn't available in Telegram yet. You can send this draft from Telegram or use Inbox Zero to revise it first.";
+    if (provider === MessagingProvider.TEAMS) {
+      return "One-click draft editing and sending aren't available in Teams yet. Use Inbox Zero to review or send this draft.";
+    }
+    if (provider === MessagingProvider.TELEGRAM) {
+      return "Draft editing isn't available in Telegram yet. You can send this draft from Telegram or use Inbox Zero to revise it first.";
+    }
+    return "Draft editing isn't available in Matrix. Use Inbox Zero to review or send this draft.";
   }
 
   return `Quick actions like archive and mark read are Slack-only right now, so this ${providerName} message is view-only.`;

@@ -460,6 +460,11 @@ async function replaceFollowUpNotification({
         );
         break;
       }
+      case MessagingProvider.MATRIX: {
+        // Matrix is send-only via a maubot webhook; there's no way to edit
+        // a previously delivered message, so treat cleanup as a no-op.
+        break;
+      }
     }
     return true;
   } catch (error) {

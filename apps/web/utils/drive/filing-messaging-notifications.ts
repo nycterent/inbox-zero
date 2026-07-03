@@ -123,7 +123,8 @@ export async function sendFilingMessagingNotifications({
         break;
       }
       case MessagingProvider.TEAMS:
-      case MessagingProvider.TELEGRAM: {
+      case MessagingProvider.TELEGRAM:
+      case MessagingProvider.MATRIX: {
         deliveryPromises.push(
           sendAutomationMessage({
             channel,

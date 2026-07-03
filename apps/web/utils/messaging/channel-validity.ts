@@ -19,6 +19,9 @@ type MessagingChannelWithRequiredFields =
     })
   | (MessagingChannelConnectionLike & {
       provider: "TELEGRAM";
+    })
+  | (MessagingChannelConnectionLike & {
+      provider: "MATRIX";
     });
 
 type OperationalMessagingChannel = MessagingChannelWithRequiredFields & {
@@ -34,6 +37,8 @@ export function hasRequiredMessagingConnectionFields(
     case MessagingProvider.TEAMS:
       return Boolean(channel.providerUserId);
     case MessagingProvider.TELEGRAM:
+      return true;
+    case MessagingProvider.MATRIX:
       return true;
     default:
       return true;
@@ -76,6 +81,10 @@ export function getMessagingChannelReconnectMessage(
 
   if (provider === MessagingProvider.TEAMS) {
     return "Please reconnect Teams before configuring notifications.";
+  }
+
+  if (provider === MessagingProvider.MATRIX) {
+    return "Please reconnect Matrix before configuring notifications.";
   }
 
   return "Please reconnect the messaging provider before configuring notifications.";

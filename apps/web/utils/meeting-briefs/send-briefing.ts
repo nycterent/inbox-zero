@@ -137,6 +137,7 @@ export async function sendBriefing({
         break;
       case MessagingProvider.TEAMS:
       case MessagingProvider.TELEGRAM:
+      case MessagingProvider.MATRIX:
         deliveryPromises.push(
           sendBriefingViaMessagingApp({
             channel,

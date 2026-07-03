@@ -42,8 +42,26 @@ async function getData({
       provider: true,
       accessToken: true,
       providerUserId: true,
+      teamId: true,
+      teamName: true,
     },
   });
+
+  if (channel?.provider === MessagingProvider.MATRIX) {
+    // Matrix has a single implicit target: the room behind the maubot
+    // webhook. There's nothing to pick, so surface it as one entry.
+    return {
+      targets: channel.teamId
+        ? [
+            {
+              id: channel.teamId,
+              name: channel.teamName || "Matrix",
+              isPrivate: true,
+            },
+          ]
+        : [],
+    };
+  }
 
   if (!channel?.accessToken) {
     return { targets: [], error: "Channel not found or not connected" };

@@ -8,6 +8,7 @@ import {
 } from "@/utils/automation-jobs/slack";
 import type { Logger } from "@/utils/logger";
 import { getMessagingAdapterRegistry } from "@/utils/messaging/chat-sdk/adapters";
+import { sendMatrixMessage } from "@/utils/messaging/matrix";
 
 export async function sendAutomationMessage({
   channel,
@@ -62,12 +63,54 @@ export async function sendAutomationMessage({
         logger,
       });
     }
+    case MessagingProvider.MATRIX: {
+      return sendAutomationMessageToMatrix({
+        teamId: channel.teamId ?? null,
+        accessToken: channel.accessToken,
+        text,
+        logger,
+      });
+    }
     default: {
       throw new AutomationJobConfigurationError(
         "Unsupported messaging provider for automation job",
       );
     }
   }
+}
+
+async function sendAutomationMessageToMatrix({
+  teamId,
+  accessToken,
+  text,
+  logger,
+}: {
+  teamId: string | null;
+  accessToken: string | null;
+  text: string;
+  logger: Logger;
+}) {
+  if (!teamId) {
+    throw new AutomationJobConfigurationError(
+      "Matrix channel is missing its notify URL",
+    );
+  }
+
+  const matrixLogger = logger.with({
+    component: "sendAutomationMessageToMatrix",
+    destination: teamId,
+  });
+
+  matrixLogger.info("Sending Matrix automation message");
+
+  await sendMatrixMessage({ teamId, accessToken }, text);
+
+  matrixLogger.info("Matrix automation message sent");
+
+  return {
+    channelId: teamId,
+    messageId: null,
+  };
 }
 
 async function sendAutomationMessageToTeams({

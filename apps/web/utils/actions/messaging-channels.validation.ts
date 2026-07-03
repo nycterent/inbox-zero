@@ -46,6 +46,12 @@ export const createMessagingLinkCodeBody = z.object({
   provider: z.enum(LINKABLE_MESSAGING_PROVIDERS),
 });
 
+export const createMatrixChannelBody = z.object({
+  notifyUrl: z.string().url(),
+  secret: z.string().min(1),
+  label: z.string().min(1),
+});
+
 export const messagingActionTypeEnum = z.enum([
   "NOTIFY_MESSAGING_CHANNEL",
   "DRAFT_MESSAGING_CHANNEL",

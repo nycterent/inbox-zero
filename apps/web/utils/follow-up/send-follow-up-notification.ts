@@ -126,6 +126,7 @@ export async function sendFollowUpNotification({
         );
         break;
       case MessagingProvider.TEAMS:
+      case MessagingProvider.MATRIX:
         deliveryPromises.push(
           sendFollowUpViaAutomationMessage({
             channel,
