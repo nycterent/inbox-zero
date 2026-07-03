@@ -1,0 +1,23 @@
+apps/web/components/messaging/DeliveryChannelsSetting.tsx
+  s_9b0e03a1f16ce1::t_596dc853f20eba 44-48
+apps/web/app/(app)/settings/page.tsx
+  s_9b0e03a1f16ce1::t_ac6bbd38d43eaf 296
+  s_9b0e03a1f16ce1::t_8a97655b12ae70 10
+  s_9b0e03a1f16ce1::t_19ad4f47b72990 313-314
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "76521a955714191d3370c7f4ab4d94179180b0a8",
+  "prompts": {},
+  "sessions": {
+    "s_9b0e03a1f16ce1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fb0d74d4-4b2e-48cf-bff1-1892d61f9b9f",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Marty <saint@ghost.lt>"
+    }
+  }
+}
